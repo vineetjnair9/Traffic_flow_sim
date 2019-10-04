@@ -23,7 +23,7 @@ x_0 = [16,8,0,30,0,0];
 %    Forward Euler debugging  
 %--------------------------------
 t_start = 0; 
-t_stop = 100000; 
+t_stop = 100; 
 timestep = 0.1;
 iterations = (t_stop/timestep) + 1;
 X = ForwardEuler('human_car_behaviour',x_0,p,'human_car_input',t_start,t_stop,timestep,false);
