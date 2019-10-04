@@ -34,16 +34,16 @@ plot(t,X(1,:))
 plot(t,X(2,:))
 plot(t,X(3,:))
 legend('Car 1', 'Car 2', 'Car 3');
-xlabel('Time [h]');
+xlabel('Time [s]');
 ylabel('Position along road [m]');
 
 figure(2)
 hold on
 plot(t,X(4,:))
-plot(t,X(5,:))
+plot(t,X(5,:))s
 plot(t,X(6,:))
 legend('Car 1', 'Car 2', 'Car 3');
-xlabel('Time [h]');
+xlabel('Time [s]');
 ylabel('Speed of car [m/s]');
 
 
