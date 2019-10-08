@@ -14,8 +14,8 @@ p.sigma = 4; % Acceleration exponent
 %    Initiate state variables  
 %--------------------------------
 
-x_0 = [16,8,0,30,0,0];
-
+% For 3 cars
+x_0 = [16,30,10,20,5,0]; % [x - positions, v - speeds]
 
 %For 20 cars: 
 
