@@ -6,7 +6,7 @@ p.l = 5; % Car length (can be speed limit)
 p.s_0 = 2; % Minimum allowable distance between cars (m) 
 p.T = 1.5; % Safe time headway 
 p.a = 0.73; % Maximum allowed acceleration 
-p.b = 1.67; % Comfortable deceleration 
+p.b = 1.67; % Comfortable deceleration  
 p.v_eq = 30; % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent
 
@@ -15,9 +15,7 @@ p.sigma = 4; % Acceleration exponent
 %--------------------------------
 
 % For 3 cars
-x_0 = [16,30,10,20,5,0]; % [x - positions, v - speeds]
-
-%For 20 cars: 
+x_0 = [16,8,0,10,5,0]; % [x - positions, v - speeds]
 
 %--------------------------------
 %    Forward Euler debugging  
