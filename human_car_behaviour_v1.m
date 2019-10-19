@@ -1,4 +1,4 @@
-function f = human_car_behaviour(x,p,u)
+function f = human_car_behaviour_v1(x,p,u)
 
 % Based on the intelligent driver model https://en.wikipedia.org/wiki/Intelligent_driver_model
 % Assuming speed and acceleration of lead car depends on the car behind it 

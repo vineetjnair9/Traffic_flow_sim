@@ -1,4 +1,4 @@
-function f = human_car_behaviour2(x,p,u)
+function f = human_car_behaviour_v2(x,p,u)
 
 %Based on the intelligent driver model https://en.wikipedia.org/wiki/Intelligent_driver_model
 
