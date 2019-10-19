@@ -28,12 +28,11 @@ for j = 1:length(num_cars) % 25 runs
     x_0(num_cars(j)+1) = 20; % Starting speed of lead car (m/s) 
 
     for i = 2:num_cars(j)
-        x_0(i) = x_0(1) - (i-1)*8; % Assume all cars start out evenly spaced by 10 m
+        x_0(i) = x_0(1) - (i-1)*8; % Assume all cars start out evenly spaced by 8 m
     end
 
     for i = num_cars(j)+2:2*num_cars(j)
-        % Assume speeds of remaining cars randomly initialized between 10
-        % and 30 m/s (according to uniform distribution)
+        % Assume speeds of remaining cars randomly initialized between 10 and 20 m/s (according to uniform distribution)
         x_0(i) = 10 + (20-10)*rand(1);
     end
 
