@@ -24,7 +24,7 @@ t_start = 0;
 t_stop = 10; 
 timestep = 0.01;
 iterations = (t_stop/timestep) + 1;
-X = ForwardEuler('human_car_behaviour_v4',x_0,p,'human_car_input',t_start,t_stop,timestep,false);
+X = ForwardEuler('human_car_behaviour_v3',x_0,p,'eval_u_step',t_start,t_stop,timestep,false);
 
 t = t_start:timestep:t_stop; 
 figure(1)
@@ -53,4 +53,4 @@ Car2_gap = X(2,iterations) - X(3,iterations)
 %    Jacobian linearization   
 %--------------------------------
 
-A = jacobian_finite_difference('human_car_behaviour_v4',x_0, p, 'human_car_input', 100, 0.001);
+A = jacobian_finite_difference('human_car_behaviour_v4',x_0, p, 'human_car_input', 10, 0.001);

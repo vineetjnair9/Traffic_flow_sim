@@ -27,7 +27,9 @@ for i = 1:nodes
         delta_v = x(nodes+i) - u(2);
         net_dist = u(1) - x(i) - p.l; 
         dis_start = p.s_0 + p.T * x(nodes+i) + ((x(nodes+i)*delta_v)/(2*sqrt(p.a*p.b))); 
-        f(nodes+i) = p.a * (1 - ((x(nodes+i)/p.v_eq)^p.sigma) - ((dis_start/net_dist)^2));
+        f(i) = x(nodes+i); % Velocities
+        % Acceleration
+        f(nodes+i) = p.a * (1 - ((x(nodes+i)/p.v_eq)^p.sigma) - ((dis_start/net_dist)^2)); 
     else         
         f(i) = x(nodes+i); % Velocities
         delta_v = x(nodes+i) - x(nodes+i-1);
