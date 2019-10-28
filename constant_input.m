@@ -1,4 +1,4 @@
-function u = eval_u_step(t)
+function u = constant_input(t)
 
 lead_x0 = 20; % Initial lead car position (m)
 lead_v0 = 120*(5/18); % Constant speed of lead car
