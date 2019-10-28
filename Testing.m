@@ -25,7 +25,7 @@ t_start = 0;
 t_stop = 50; 
 timestep = 0.01;
 iterations = (t_stop/timestep) + 1;
-X = ForwardEuler('human_car_behaviour_v5',x_0,p,'human_car_input',t_start,t_stop,timestep,false);
+X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_input',t_start,t_stop,timestep,false);
 
 t = t_start:timestep:t_stop; 
 figure(1)
