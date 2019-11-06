@@ -70,14 +70,11 @@ p.dxFD=1e-7;             % or can use finite difference jacobian with this pertu
 
 % eval_Jf = 'eval_Jf_FiniteDifference';
 eval_Jf = 'jacobian_finite_difference';
-% [q, xs] = continuation_p1b('human_car_behaviour_v5', 'curlyf',x0, p, 'constant_input', errf, errDeltax, relDeltax, MaxIter, visualize, FiniteDifference,eval_Jf)
-[q, xs] = continuation_p1b('human_car_behaviour_v5', x0, p, 'constant_input')
-
-% [x_analytic,converged,errf_k,errDeltax_k,relDeltax_k,iterations] = NewtonMethod('human_car_behaviour_v5', x0, p, 'constant_input', errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf )
+[x_analytic,converged,errf_k,errDeltax_k,relDeltax_k,iterations] = NewtonMethod('human_car_behaviour_v5', x0, p, 'constant_input', errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf )
 % x_0 = [12,5,0,10,5,0]; % [x - positions, v - speeds]
 
-x0 = [70, 50, 10, 3 , 4, 2];
-% [x_analytic,converged,errf_k,errDeltax_k,relDeltax_k,iterations] = NewtonMethod('human_car_behaviour_v5', x0, p, 'constant_input', errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf )
+x0 = [70, 50, 0, 0, 4, 2];
+[x_analytic,converged,errf_k,errDeltax_k,relDeltax_k,iterations] = NewtonMethod('human_car_behaviour_v5', x0, p, 'constant_input', errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf )
 
 
 

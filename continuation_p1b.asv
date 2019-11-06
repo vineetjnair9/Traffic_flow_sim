@@ -1,0 +1,28 @@
+function [q, xs] = continuation_p1b(f, x0,p,u)
+
+q = 0.1:0.1:1.0;
+m = size(x0);
+errf=1e-3;
+errDeltax=1e-3;
+relDeltax=0.01;
+MaxIter=20;
+visualize=0;
+FiniteDifference = 1;
+p.dxFD=1e-7;
+eval_Jf = 'jacobian_finite_difference';
+for idx = 1:length(q)
+    if idx == 1
+        x0_iter(:, idx) = x0;
+    else
+        x0_iter(:, idx) = xs(:, idx-1);
+    end
+    x0iter = x0_iter(:, idx);
+    Q = q(idx)*eye(m);
+    
+    eval_f = @() Q*f(x0iter(:),p,u) + (eye(m)-Q)*x(:);
+
+
+    
+    xs(:, idx) = NewtonMethod(eval_f,x0iter,p,u,errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf);
+
+end
