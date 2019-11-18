@@ -11,6 +11,7 @@ p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
 p.v_eq = 120*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
 
+%%
 %--------------------------------
 %    Initiate state variables  
 %--------------------------------
@@ -25,7 +26,7 @@ t_start = 0;
 t_stop = 50; 
 timestep = 0.01;
 iterations = (t_stop/timestep) + 1;
-X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_input',t_start,t_stop,timestep,false);
+X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 
 t = t_start:timestep:t_stop; 
 figure(1)
@@ -54,7 +55,7 @@ Car2_gap = X(2,iterations) - X(3,iterations)
 %    Jacobian linearization   
 %--------------------------------
 
-A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_input', 10, 0.001);
+A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
 
 %% 
 % Newton method convergence checks.
@@ -67,7 +68,6 @@ FiniteDifference = 1;
 x0 = x_0;
 p.dxFD=1e-7;             % or can use finite difference jacobian with this perturbation
 
-
 % eval_Jf = 'eval_Jf_FiniteDifference';
 eval_Jf = 'jacobian_finite_difference';
 % [q, xs] = continuation_p1b('human_car_behaviour_v5', 'curlyf',x0, p, 'constant_input', errf, errDeltax, relDeltax, MaxIter, visualize, FiniteDifference,eval_Jf)
@@ -79,32 +79,8 @@ eval_Jf = 'jacobian_finite_difference';
 x0 = [70, 50, 10, 3 , 4, 2];
 % [x_analytic,converged,errf_k,errDeltax_k,relDeltax_k,iterations] = NewtonMethod('human_car_behaviour_v5', x0, p, 'constant_input', errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf )
 
-
-
-
-
 %% Reordering A to correspond to the state vector [v, x] instead
 num_cars = 3;
 A_reordered = A;
 A_reordered(1:num_cars,:) = A(num_cars+1:end,:);
 A_reordered(num_cars+1:end,:) = A(1:num_cars,:);
-
-%% Extending to larger no. of cars
-
-num_cars = 30;
-
-for j = 1:length(num_cars) 
-    x_0 = zeros(1,2*num_cars(j));
-
-    x_0(1) = 1000*num_cars(j); % Starting position of lead car (m)
-    x_0(num_cars(j)+1) = 20; % Starting speed of lead car (m/s) 
-
-    for i = 2:num_cars(j)
-        x_0(i) = x_0(1) - (i-1)*8; % Assume all cars start out evenly spaced by 8 m
-    end
-
-    for i = num_cars(j)+2:2*num_cars(j)
-        % Assume speeds of remaining cars randomly initialized between 10 and 20 m/s (according to uniform distribution)
-        x_0(i) = 10 + (20-10)*rand(1);
-    end
-end
