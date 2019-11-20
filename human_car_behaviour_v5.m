@@ -1,4 +1,4 @@
-function f = human_car_behaviour_v5(x,p,u)
+function f = human_car_behaviour_v5(x,p,u,t)
 
 % Based on the intelligent driver model https://en.wikipedia.org/wiki/Intelligent_driver_model
 % Position, speed and acceleration of lead car set by inputs 

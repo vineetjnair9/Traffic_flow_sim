@@ -1,19 +1,14 @@
 function u = sinusoidal_input(t)
 
-delta_t = 0.01; % (s)
+delta_t = 0.0001; % (s) - has to match timestep used for FD integration
 
 % Generating input
 
-if (t <= 0) 
-    u(1) = 20; % Initial position (m)
-    u(2) = 120*(5/18); % Initial speed (m/s) 
-    
-else
-    prev = sinusoidal_input(t-delta_t);
+% Time period of sinusoidal input
+T = 10; % (s)
 
-    u(1) = prev(1) + prev(2)*delta_t;
-    u(2) = prev(2) + sin(0.05*t);
-
-end
+% For 3 car case, lead car starting at 20 m ahead
+u(1) = 20 + (5*T)/(2*pi) + 25*t - 5*cos((2*pi*t)/T);
+u(2) = 25 + 5*sin((2*pi*t)/T);
 
 end

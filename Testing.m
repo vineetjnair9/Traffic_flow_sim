@@ -1,3 +1,6 @@
+clear all;
+close all;
+
 %--------------------------------
 %    Initiate system parameters 
 %--------------------------------
@@ -8,7 +11,7 @@ p.s_0 = 2; % Minimum allowable distance between cars = desired stopping/jam dist
 p.T = 1.5; % Safe time headway/gap (s)
 p.a = 1.4 ; % Maximum allowed acceleration (m/s^2) - 0.73
 p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
-p.v_eq = 120*(5/18); % Desired street speed (m/s)
+p.v_eq = 100*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
 
 %%
@@ -23,7 +26,7 @@ x_0 = [12,5,0,10,5,0]; % [x - positions, v - speeds]
 %    Forward Euler debugging  
 %--------------------------------
 t_start = 0; 
-t_stop = 50; 
+t_stop = 100; 
 timestep = 0.01;
 iterations = (t_stop/timestep) + 1;
 X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
@@ -57,8 +60,8 @@ Car2_gap = X(2,iterations) - X(3,iterations)
 
 A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
 
-%% 
-% Newton method convergence checks.
+%% Newton method with continuation scheme
+% Cconvergence checks.
 errf=1e-3;
 errDeltax=1e-3;
 relDeltax=0.01;
@@ -71,7 +74,7 @@ p.dxFD=1e-7;             % or can use finite difference jacobian with this pertu
 % eval_Jf = 'eval_Jf_FiniteDifference';
 eval_Jf = 'jacobian_finite_difference';
 % [q, xs] = continuation_p1b('human_car_behaviour_v5', 'curlyf',x0, p, 'constant_input', errf, errDeltax, relDeltax, MaxIter, visualize, FiniteDifference,eval_Jf)
-[q, xs] = continuation_p1b('human_car_behaviour_v5', x0, p, 'constant_input')
+% [q, xs] = continuation_p1b('human_car_behaviour_v5', x0, p, 'constant_input')
 
 % [x_analytic,converged,errf_k,errDeltax_k,relDeltax_k,iterations] = NewtonMethod('human_car_behaviour_v5', x0, p, 'constant_input', errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf )
 % x_0 = [12,5,0,10,5,0]; % [x - positions, v - speeds]
