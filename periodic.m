@@ -32,6 +32,7 @@ p.a = 1.4 ; % Maximum allowed acceleration (m/s^2) - 0.73
 p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
 p.v_eq = 120*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
+p.dxFD = 0.001;
 
 % For 3 cars (excluding lead car)
 x_0 = [12,5,0,10,5,0]; % [x - positions, v - speeds]
@@ -73,7 +74,8 @@ ylabel('Speed of car [m/s]');
 % xf = shooting_newtonNd(fhand,x_0,T);
 
 % Using Forward Euler
-T = 0.5;
+T = 0.1;
 timestep = 0.001;
-x_0 = [12,10]'; % [x - positions, v - speeds]
-xf = shooting_newton(x_0,T,p,timestep);
+x_0 = [0,5]'; % [x - positions, v - speeds]
+fhand = @(x_0) shooting_newton_v2(x_0,T,p,timestep);
+xf = newtonNd(fhand,x_0);

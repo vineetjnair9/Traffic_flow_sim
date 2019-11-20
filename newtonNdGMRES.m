@@ -25,7 +25,9 @@ epsilon = 0.001;
 for iter = 1:maxIters
     f = fhand(x0,t);               % evaluate function
     % Finite difference Jacobian at each state & time
-    J = jacobian_finite_difference('human_car_behaviour_v5',x0, p, 'constant_speed_input', t, epsilon);
+    %J = jacobian_finite_difference('human_car_behaviour_v5',x0, p, 'constant_speed_input', t, epsilon);
+    u = constant_speed_input(t);
+    J = Jf_FiniteDifference('human_car_behaviour_v5',x0, p,u);
     dx = gmres(J,-f);
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1
