@@ -11,7 +11,7 @@ n = ceil(T/timestep);
 % Newton loop
 for iter = 1:maxIters
     f = ForwardEuler('human_car_behaviour_v5',x0,params,'sinusoidal_input',0,T,timestep,false);
-    f = f(:,n) - x0;
+    f = f(2,n) - x0;
     [dx, ~] = mfgcr_shooting_FE(x0, params, -f, delta, epsilon, maxIters,T); % solve linear system
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1

@@ -10,7 +10,7 @@ function [x, r_norms] = mfgcr_shooting_FE(xk, params, b, tol, epsilon, maxiters,
 % x - computed solution, returns null if no convergence
 % r_norms - the scaled norm of the residual at each iteration (r_norms(1) = 1)
 
-timestep = 1e-4; % (s)
+timestep = 0.001; % (s)
 
 % Generate the initial guess for x (zero)
 x = zeros(size(b));
@@ -29,8 +29,8 @@ for iter = 1:maxiters
   p(:,iter) = r;
   phi1 = ForwardEuler('human_car_behaviour_v5',xk + epsilon * p(:,iter),params,'sinusoidal_input',0,T,timestep,false);
   phi2 = ForwardEuler('human_car_behaviour_v5',xk,params,'sinusoidal_input',0,T,timestep,false);
-  phi1 = phi1(:,n);
-  phi2 = phi2(:,n);
+  phi1 = phi1(2,n);
+  phi2 = phi2(2,n);
   
   Mp(:,iter) = (phi1 - phi2)/epsilon - p(:,iter);
   

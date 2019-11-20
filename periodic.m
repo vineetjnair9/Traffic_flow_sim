@@ -1,7 +1,7 @@
 %% Testing periodic input
 t_start = 0; 
 t_stop = 20; 
-timestep = 0.0001;
+timestep = 0.001;
 iterations = (t_stop/timestep) + 1;
 
 u = zeros(iterations,2);
@@ -44,7 +44,7 @@ timestep = 0.1;
 
 u = @(t) constant_speed_input(t);
 fhand = @(x,t) human_car_behaviour_v5(x,p,u,t);
-X = trap(fhand,x_0,t_start,t_stop,timestep);
+X = trap(fhand,x_0,p,t_start,t_stop,timestep);
 
 t = t_start:timestep:t_stop; 
 figure(1)
@@ -67,12 +67,13 @@ ylabel('Speed of car [m/s]');
 
 %% Shooting Newton
 % Using trap
-T = 10;
-u = @(t) sinusoidal_input(t);
-fhand = @(x,t) human_car_behaviour_v5(x,p,u,t);
-xf = shooting_newtonNd(fhand,x_0,T);
+% T = 10;
+% u = @(t) sinusoidal_input(t);
+% fhand = @(x,t) human_car_behaviour_v5(x,p,u,t);
+% xf = shooting_newtonNd(fhand,x_0,T);
 
-%% Using Forward Euler
-T = 10;
+% Using Forward Euler
+T = 0.5;
 timestep = 0.001;
-xf = shooting_newtonNd_FE(x_0,T,p,timestep);
+x_0 = [12,10]'; % [x - positions, v - speeds]
+xf = shooting_newton(x_0,T,p,timestep);

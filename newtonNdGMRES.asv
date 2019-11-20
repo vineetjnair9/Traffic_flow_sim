@@ -1,4 +1,4 @@
-function [xf, x] = newtonNdGCR(fhand,x0,t,delta,epsilon)
+function [xf, x] = newtonNdGMRES(fhand,x0,t,delta,epsilon)
 % function newton1d(fhand,x0,itpause)
 %
 % INPUTS:
@@ -23,7 +23,7 @@ x00 = x0;             % initial guess
 % Newton loop
 for iter = 1:maxIters
     f = fhand(x0,t);               % evaluate function
-    [dx, ~] = mfgcr(fhand, x0, t, -f, delta, epsilon, maxIters); % solve linear system
+    J = jacobian_finite_difference('human_car_behaviour_v5',x0, p, 'constant_speed_input', t, 0.001)
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1
     x(:,iter) = x0 + dx;         % solution x at step k+1
