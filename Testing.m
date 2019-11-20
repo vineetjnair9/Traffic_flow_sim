@@ -57,8 +57,10 @@ Car2_gap = X(2,iterations) - X(3,iterations)
 %--------------------------------
 %    Jacobian linearization   
 %--------------------------------
-
+%%
 A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
+%%
+B = U_jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001)
 
 %% Newton method with continuation scheme
 % Cconvergence checks.
