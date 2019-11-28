@@ -13,6 +13,7 @@ p.a = 1.4 ; % Maximum allowed acceleration (m/s^2) - 0.73
 p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
 p.v_eq = 100*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
+p.dxFD=1e-7; % For finite difference Jacobian
 
 %%
 %--------------------------------
@@ -54,15 +55,7 @@ ylabel('Speed of car [m/s]');
 Car1_gap = X(1,iterations) - X(2,iterations)
 Car2_gap = X(2,iterations) - X(3,iterations)
 
-%--------------------------------
-%    Jacobian linearization   
-%--------------------------------
-%%
-A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
-%%
-B = U_jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001)
-
-%% Newton method with continuation scheme
+%% Newton method with continuation scheme 
 % Cconvergence checks.
 errf=1e-3;
 errDeltax=1e-3;
@@ -89,3 +82,17 @@ num_cars = 3;
 A_reordered = A;
 A_reordered(1:num_cars,:) = A(num_cars+1:end,:);
 A_reordered(num_cars+1:end,:) = A(1:num_cars,:);
+
+%--------------------------------
+%    Jacobian linearization   
+%--------------------------------
+%% Model Order Reduction
+%x_0 = [12,5,0,10,5,0];
+u = constant_speed_input(5);
+J = Jf_FiniteDifference('human_car_behaviour_v5',x_0, p,u);
+%A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
+%%
+B = U_jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
+Bnew = [human_car_behaviour_v5(x_0,p,constant_speed_input(10),10) B];
+    
+[A_, b_, c_, sys] = eigTrunc(A, Bnew, ones(6,1), 1);

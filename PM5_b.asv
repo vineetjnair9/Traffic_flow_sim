@@ -6,7 +6,7 @@ p.a = 1.4 ; % Maximum allowed acceleration (m/s^2) - 0.73
 p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
 p.v_eq = 120*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
-p.dxFD=1e-7; % For finite difference Jacobian
+
 %--------------------------------
 %    Initiate state variables  
 %--------------------------------
@@ -71,6 +71,7 @@ large_t = t_start:large_timestep:t_stop;
 %%
 u1 = constant_speed_input(1);
 
+
 [de, se] = FindError(reference_X, large_X, reference_t, large_t, time_testpts);
 % phi_TR = traprule_nonlinear(phi_0, large_timestep, t_start, t_stop, @(phi,t)human_car_behaviour_v6(phi,p, u, t));
 
@@ -82,7 +83,7 @@ timestep = 0.01;
 
 u = @(t) constant_speed_input(t);
 fhand = @(x,t) human_car_behaviour_v5(x,p,u,t);
-X = trap(fhand,x_0,p, t_start,t_stop,timestep);
+X = Copy_of_trap(fhand,x_0,p, t_start,t_stop,timestep);
 
 t = t_start:timestep:t_stop; 
 figure(1)

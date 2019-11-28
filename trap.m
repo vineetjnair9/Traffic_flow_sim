@@ -15,6 +15,15 @@ for n=1:ceil((t_stop-t_start)/timestep) % time index
    f_new = @(x,t) f_trap(dt,gamma,fhand,x,t);
    [X(:,n+1), ~] = newtonNdGMRES(f_new,X(:,n),p,t(n+1));
    
+   disp(X(:,n+1));
+   
+   % Dynamic time stepping
+   if norm(X(:,n+1)-X(:, n), inf)/ dt > 10000 || (convergence == 0)
+       timestep = timestep/2;
+   else 
+       timestep = timestep*2;
+   end
+   
 end
 
 end

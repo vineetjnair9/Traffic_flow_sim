@@ -1,0 +1,1 @@
+function Linear_sys = linearized(A,B,x,u)

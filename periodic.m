@@ -32,15 +32,15 @@ p.a = 1.4 ; % Maximum allowed acceleration (m/s^2) - 0.73
 p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
 p.v_eq = 120*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
-p.dxFD = 0.001;
+p.dxFD = 1e-5;
 
 % For 3 cars (excluding lead car)
 x_0 = [12,5,0,10,5,0]; % [x - positions, v - speeds]
 
 %%
 t_start = 0; 
-t_stop = 10; 
-timestep = 0.1;
+t_stop = 200; 
+timestep = 0.001;
 %X = ForwardEuler('human_car_behaviour_v5',x_0,p,'sinusoidal_input',t_start,t_stop,timestep,false);
 
 u = @(t) constant_speed_input(t);

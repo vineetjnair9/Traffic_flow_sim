@@ -27,8 +27,10 @@ for iter = 1:maxIters
     % Finite difference Jacobian at each state & time
     %J = jacobian_finite_difference('human_car_behaviour_v5',x0, p, 'constant_speed_input', t, epsilon);
     u = constant_speed_input(t);
-    J = Jf_FiniteDifference('human_car_behaviour_v5',x0, p,u);
-    dx = gmres(J,-f);
+    J = Jf_FiniteDifference('human_car_behaviour_v5',x0, p,u)
+    cond(J)
+    %dx = gmres(J,-f);
+    dx = -J\f 
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1
     x(:,iter) = x0 + dx;         % solution x at step k+1

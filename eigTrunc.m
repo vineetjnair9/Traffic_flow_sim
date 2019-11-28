@@ -34,3 +34,4 @@ function [A_, b_, c_, sys] = eigTrunc(A, b, c, q)
   sys = ss(A_, b_, c_, 0);
 
 end
+

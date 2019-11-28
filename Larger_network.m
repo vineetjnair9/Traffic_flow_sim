@@ -33,9 +33,9 @@ for j = 1:num_cars
     timestep = 0.001;
     
 end
-
-X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
-A = jacobian_finite_difference('human_car_behaviour_v5',x_0,p,'constant_speed_input',10,0.001);
+x_0 = x_0';
+%X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
+%A = jacobian_finite_difference('human_car_behaviour_v5',x_0,p,'constant_speed_input',10,0.001);
 
 %%
 A_reordered = A;
@@ -67,3 +67,13 @@ hold off
 %% 
 spy(A)
 cond(A)
+
+%% Model Order Reduction from 30 to 5 cars
+A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
+B = U_jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
+Bnew = [human_car_behaviour_v5(x_0,p,constant_speed_input(10),10) B];
+    
+[A_, b_, c_, sys] = eigTrunc(A, Bnew, ones(60,1), 10);
+
+
+
