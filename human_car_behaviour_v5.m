@@ -14,7 +14,7 @@ for i = 1:nodes
     
     if (i == 1) % Car 1
         delta_v = x(nodes+i) - u(2);
-        net_dist = u(1) - x(i) - p.l; 
+        net_dist = u(1) - x(1) - p.l; 
         dis_start = p.s_0 + p.T * x(nodes+i) + ((x(nodes+i)*delta_v)/(2*sqrt(p.a*p.b))); 
         f(i) = x(nodes+i); % Velocities
         % Acceleration

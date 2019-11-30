@@ -1,24 +1,24 @@
+clear all;
+
 % Updated some parameters using enhanced IDM paper
-p.l = 4; % Car length (can be speed limit) 
+p.l = 5; % Car length 
 p.s_0 = 2; % Minimum allowable distance between cars = desired stopping/jam distance (m) 
-p.T = 1.5; % Safe time headway/gap (s)
-p.a = 1.4 ; % Maximum allowed acceleration (m/s^2) - 0.73
-p.b = 2 ; % Comfortable deceleration (m/s^2) - 1.67
+p.T = 1.6; % Safe time headway/gap (s)
+p.a = 0.73; % Maximum allowed acceleration (m/s^2)
+p.b = 1.67; % Comfortable deceleration (m/s^2)
 p.v_eq = 120*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
-p.dxFD=1e-7; % For finite difference Jacobian
+p.dxFD = 1e-7; % For finite difference Jacobian
 %--------------------------------
 %    Initiate state variables  
 %--------------------------------
 
 % For 3 cars (excluding lead car)
-x_0 = [20,7,0,4,10,0]; % [x - positions, v - speeds]
-
-
+x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 t_start = 0; 
 t_stop = 60; 
-timestep = 0.00001;
+timestep = 1e-5;
 
 % compare the values at discrete time points
 no_testpts = int8((t_stop-t_start));
@@ -76,13 +76,13 @@ u1 = constant_speed_input(1);
 
 %%
 t_start = 0; 
-t_stop = 1; 
-timestep = 0.01;
+t_stop = 50; 
+timestep = 1e-3;
 %X = ForwardEuler('human_car_behaviour_v5',x_0,p,'sinusoidal_input',t_start,t_stop,timestep,false);
 
-u = @(t) constant_speed_input(t);
-fhand = @(x,t) human_car_behaviour_v5(x,p,u,t);
-X = trap(fhand,x_0,p, t_start,t_stop,timestep);
+u = @constant_speed_input;
+fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
+X = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
 
 t = t_start:timestep:t_stop; 
 figure(1)

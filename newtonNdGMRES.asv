@@ -1,4 +1,4 @@
-function [xf, converged, x] = newtonNdGMRES(fhand,x0,p,u,dt,t)
+function [xf, x, converged] = newtonNdGMRES(fhand,x0,p,u,dt,t)
 % INPUTS:
 %   fhand - function handle
 %   x0 - initial guess
@@ -36,7 +36,7 @@ for iter = 1:maxIters
     x0 = x(:,iter);              % set value for next guess
     if nf(iter) < tolf && ndx(iter) < tolx % check for convergence
         fprintf('Converged in %d iterations\n',iter);
-        converged = 1;
+        converged = 1
         break
     end
 end

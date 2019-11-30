@@ -1,7 +1,7 @@
-function j = jacobian_finite_difference(eval_f,x_0, p, eval_u, t, epsilon)
+function j = jacobian_finite_difference(eval_f,x_0, p, u, epsilon)
 
 n = length(x_0);
-u = feval(eval_u,t);
+%u = feval(eval_u,t);
 f_0 = feval(eval_f, x_0, p, u);
 f_0 = f_0';
 x_perturbed = x_0; 
