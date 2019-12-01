@@ -17,10 +17,10 @@ while n<=ceil((t_stop-t_start)/timestep) % time index
    [X(:,n+1), converged, ~] = newtonNdGMRES(f_new,X(:,n),p,u,dt,t(n+1));
    
 %    % Dynamic adaptive time stepping
-   if (converged == 0) || norm(X(:,n+1)-X(:, n), Inf)/ dt > abs(norm(X(:,n+1),Inf) - norm (X(:,n),Inf)) / dt % Max slope 
+   if (converged == 0) || norm(X(:,n+1)-X(:, n), Inf)/ dt > 120/dt % Max slope 
        timestep = timestep/2;
        n = n-1;
-   else 
+   elseif (norm(X(:,n+1)-X(:, n), Inf)/ dt < 0.5) % min slope
        timestep = timestep*2;
        n = n-1;
    end

@@ -10,11 +10,12 @@ for n=1:ceil((t_stop-t_start)/timestep) % time index
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
    
-   f = fhand(X(:,n),u(t(n)),t(n));
-   gamma = X(:,n) + (dt/2)*f;
+   x0 = X(:,n);
+   f = fhand(x0,u(t(n)),t(n));
+   gamma = x0 + (dt/2)*f;
       
    f_new = @(x,u,t) f_trap(dt,gamma,fhand,x,u,t);
-   [X(:,n+1), ~] = newtonNdGMRES(f_new,X(:,n),p,u,dt,t(n+1));
+   [X(:,n+1), ~] = newtonNdGMRES(f_new,x0,p,u,dt,t(n+1));
 end
 
 end

@@ -99,10 +99,8 @@ Bnew = [human_car_behaviour_v5(x_0,p,constant_speed_input(10),10) B];
 
 %% Implicit explicit methods compared
 t_start = 0; 
-t_stop = 50; 
+t_stop = 10; 
 timestep = 1e-3;
-x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
-
 %X = ForwardEuler('human_car_behaviour_v5',x_0,p,'sinusoidal_input',t_start,t_stop,timestep,false);
 
 u = @constant_speed_input;
