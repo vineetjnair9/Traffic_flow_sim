@@ -1,6 +1,3 @@
-clear all;
-close all;
-
 %--------------------------------
 %    Initiate system parameters 
 %--------------------------------
@@ -87,7 +84,7 @@ A_reordered(num_cars+1:end,:) = A(1:num_cars,:);
 %    Jacobian linearization   
 %--------------------------------
 %% Model Order Reduction
-%x_0 = [12,5,0,10,5,0];
+x_0 = [12,5,0,10,5,0];
 u = constant_speed_input(5);
 J = Jf_FiniteDifference('human_car_behaviour_v5',x_0, p,u);
 %A = jacobian_finite_difference('human_car_behaviour_v5',x_0, p, 'constant_speed_input', 10, 0.001);
@@ -98,15 +95,60 @@ Bnew = [human_car_behaviour_v5(x_0,p,constant_speed_input(10),10) B];
 [A_, b_, c_, sys] = eigTrunc(A, Bnew, ones(6,1), 1);
 
 %% Implicit explicit methods compared
+
+x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
+% Need to change lead car position too in input when we change no. of cars!
+
+%% Runtime and accuracy comparisons
+
+num_cars = 3;
+x_0 = zeros(1,2*num_cars); % Initial state (speeds & positions)
+
+x_0 = zeros(2*num_cars,1);
+
+for i = 1:num_cars
+    % Assume all cars start out evenly spaced by 10 m
+    % Last follower car starts at 50 m
+    x_0(num_cars + 1 - i) = 50 + (num_cars - i)*10; 
+end
+
+for i = num_cars+1:2*num_cars
+    % Assume speeds of all cars randomly initialized between 20 and 30 m/s (according to uniform distribution)
+    x_0(i) = 20 + (30-20)*rand(1);
+end
+
 t_start = 0; 
-t_stop = 10; 
-timestep = 1e-3;
-%X = ForwardEuler('human_car_behaviour_v5',x_0,p,'sinusoidal_input',t_start,t_stop,timestep,false);
+t_stop = 100; 
+
+%% 'True' solution (FE using very small timestep)
+
+timestep = 1e-6;
+tic
+X_true_3 = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
+FE_time_true = toc;
+
+%%
+timestep = 0.0001;
+
+tic
+X_FE = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
+FE_time = toc;
+FE_accuracy = (norm(X_FE - X_true)/norm(X_true))*100 % Relative error (%)
 
 u = @constant_speed_input;
 fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
-%X = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
-X = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
+
+tic
+X_trap = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
+trap_time = toc
+trap_accuracy = (norm(X_trap - X_true)/norm(X_true))*100 % Relative error (%)
+
+tic
+X_trap_adaptive = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
+trap_adapt_time = toc
+trap_adapt_accuracy = (norm(X_trap_adaptive - X_true)/norm(X_true))*100
+
+%% Plots
 
 t = t_start:timestep:t_stop; 
 figure(1)
@@ -126,3 +168,4 @@ plot(t,X(6,:))
 legend('Car 1', 'Car 2', 'Car 3');
 xlabel('Time [s]');
 ylabel('Speed of car [m/s]');
+

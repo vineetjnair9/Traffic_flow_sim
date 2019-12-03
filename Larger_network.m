@@ -20,7 +20,7 @@ for j = 1:num_cars
     x_0 = zeros(1,2*num_cars);
 
     for i = 1:num_cars
-        % Assume all cars start out evenly spaced by 12 m
+        % Assume all cars start out evenly spaced by 20 m
         x_0(num_cars + 1 - i) = 50 + (num_cars - i)*20; 
     end
 
@@ -28,13 +28,13 @@ for j = 1:num_cars
         % Assume speeds of all cars randomly initialized between 20 and 30 m/s (according to uniform distribution)
         x_0(i) = 20 + (30-20)*rand(1);
     end
-    
-    t_start = 0; 
-    t_stop = 10; 
-    timestep = 0.0001;
-    
+       
 end
 x_0 = x_0';
+
+t_start = 0; 
+t_stop = 10; 
+timestep = 0.0001;
 X = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 %A = jacobian_finite_difference('human_car_behaviour_v5',x_0,p,'constant_speed_input',10,0.001);
 
