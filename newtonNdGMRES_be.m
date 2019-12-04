@@ -25,10 +25,9 @@ len = length(x0);
 % Newton loop
 for iter = 1:maxIters
     f = fhand(x0,u(t),t);               % evaluate function
-    %J = jacobian_finite_difference('human_car_behaviour_v5',x0, p, 'constant_speed_input', t, epsilon);
     J = Jf_FiniteDifference('human_car_behaviour_v5',x0,p,u(t),t);
-    J_trap = eye(len) - (dt/2)*J;
-    dx = gmres(J_trap,-f);
+    J_be = eye(len) - dt*J;
+    dx = gmres(J_be,-f);
     %dx = -J_trap\f; 
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1

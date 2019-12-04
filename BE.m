@@ -10,7 +10,6 @@ for n=1:ceil((t_stop-t_start)/timestep) % time index
    t(n+1)= t(n) + dt;
    
    x0 = X(:,n);
-   f = fhand(x0,u(t(n)),t(n));
    gamma = x0;
       
    f_new = @(x,u,t) f_be(dt,gamma,fhand,x,u,t);
