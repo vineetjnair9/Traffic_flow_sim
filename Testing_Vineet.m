@@ -101,7 +101,7 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 %% Runtime and accuracy comparisons
 timestep = 1e-4;
-num_cars = 5;
+num_cars = 100;
 
 x_0 = zeros(2*num_cars,1); % Initial state (speeds & positions)
 
@@ -117,17 +117,17 @@ for i = num_cars+1:2*num_cars
 end
 
 t_start = 0; 
-t_stop = 50; 
+t_stop = 180; 
 
 %% 'True' solution (FE using very small timestep)
 
 timestep = 1e-5;
 tic
-X_true_3 = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
+X_true_100 = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 FE_time_true = toc;
 
 %%
-timestep = 1e-4;
+timestep = 1e-3;
 
 u = @constant_speed_input;
 fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
@@ -135,19 +135,19 @@ fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
 tic
 [X_trap_adaptive,t_adapt] = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
 trap_adapt_time = toc
-%trap_adapt_accuracy = (norm(X_trap_adaptive - X_true)/norm(X_true))*100
+trap_adapt_accuracy = (norm(X_trap_adaptive - X_true_100)/norm(X_true_100))*100
 
 %%
 tic
 X_FE = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 FE_time = toc;
-%FE_accuracy = (norm(X_FE - X_true)/norm(X_true))*100 % Relative error (%)
+FE_accuracy = (norm(X_FE - X_true__100)/norm(X_true_100))*100 % Relative error (%)
 
 %%
 tic
 X_trap = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
 trap_time = toc
-%trap_accuracy = (norm(X_trap - X_true)/norm(X_true))*100 % Relative error (%)
+trap_accuracy = (norm(X_trap - X_true_100)/norm(X_true_100))*100 % Relative error (%)
 
 %% Plots
 
