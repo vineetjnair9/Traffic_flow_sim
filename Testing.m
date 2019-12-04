@@ -101,7 +101,7 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 %% Runtime and accuracy comparisons
 
-num_cars = 3;
+num_cars = 5;
 x_0 = zeros(1,2*num_cars); % Initial state (speeds & positions)
 
 x_0 = zeros(2*num_cars,1);
@@ -109,7 +109,7 @@ x_0 = zeros(2*num_cars,1);
 for i = 1:num_cars
     % Assume all cars start out evenly spaced by 10 m
     % Last follower car starts at 50 m
-    x_0(num_cars + 1 - i) = 50 + (num_cars - i)*10; 
+    x_0(num_cars + 1 - i) = 50 + (num_cars - i)*20; 
 end
 
 for i = num_cars+1:2*num_cars
@@ -118,7 +118,16 @@ for i = num_cars+1:2*num_cars
 end
 
 t_start = 0; 
-t_stop = 100; 
+t_stop = 180;
+%%
+timestep = 0.0001;
+
+% Xresponse = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
+Xresponse = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
+
+filename = 'response5.mat';
+save(filename, 'Xresponse', '-v7.3');
+
 
 %% 'True' solution (FE using very small timestep)
 
@@ -149,23 +158,22 @@ trap_adapt_time = toc
 trap_adapt_accuracy = (norm(X_trap_adaptive - X_true)/norm(X_true))*100
 
 %% Plots
-
 t = t_start:timestep:t_stop; 
-figure(1)
+
+figure(1)  
 hold on
-plot(t,X(1,:))
-plot(t,X(2,:))
-plot(t,X(3,:))
-legend('Car 1', 'Car 2', 'Car 3');
+for i = 1:num_cars
+    plot(t,Xresponse(i,:));
+end
 xlabel('Time [s]');
 ylabel('Position along road [m]');
+hold off
 
-figure(2)
+figure(2)  
 hold on
-plot(t,X(4,:))
-plot(t,X(5,:))
-plot(t,X(6,:))
-legend('Car 1', 'Car 2', 'Car 3');
+for i = num_cars+1:2*num_cars
+    plot(t,Xresponse(i,:));
+end
 xlabel('Time [s]');
 ylabel('Speed of car [m/s]');
-
+hold off
