@@ -108,7 +108,7 @@ x_0 = zeros(2*num_cars,1); % Initial state (speeds & positions)
 for i = 1:num_cars
     % Assume all cars start out evenly spaced by 10 m
     % Last follower car starts at 50 m
-    x_0(num_cars + 1 - i) = 50 + (num_cars - i)*10; 
+    x_0(i) = 50 + (num_cars-i)*20; 
 end
 
 for i = num_cars+1:2*num_cars
