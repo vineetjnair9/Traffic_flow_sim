@@ -101,7 +101,7 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 %% Runtime and accuracy comparisons
 timestep = 1e-4;
-num_cars = 3;
+num_cars = 5;
 
 x_0 = zeros(2*num_cars,1); % Initial state (speeds & positions)
 

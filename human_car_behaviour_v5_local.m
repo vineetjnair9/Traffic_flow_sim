@@ -23,8 +23,10 @@ for i = 1:nodes
         f(i) = x(nodes+i); % Velocities
         delta_v = x(nodes+i) - x(nodes+i-1);
         if (x(i) < 4000 && x(i) > 3000)
-            % Bottlneck in this section
+            % Bottleneck in this section
             p.T = 4; % Reduced visibility, more careful driving
+        else 
+            p.T = 1.6;
         end            
         
         net_dist = x(i-1) - x(i) - p.l;
