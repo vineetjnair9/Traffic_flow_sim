@@ -101,7 +101,7 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 %% Runtime and accuracy comparisons
 
-num_cars = 1000;
+num_cars = 500;
 x_0 = zeros(2*num_cars,1);
 
 for i = 1:num_cars
@@ -121,11 +121,11 @@ t_stop = 180;
 timestep = 0.0001;
 times = [1, 30, 60, 120, 180];
 tic;
-% Xresponse = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
-Xresponse = SelectedForwardEuler('human_car_behaviour_v5', x_0, p, 'constant_speed_input', t_start, t_stop, timestep, times);
+Xresponse = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
+% Xresponse = SelectedForwardEuler('human_car_behaviour_v5', x_0, p, 'constant_speed_input', t_start, t_stop, timestep, times);
 % try splitting the time. 
 time_took = toc
-filename = 'response1000selected.mat';
+filename = 'response500full.mat';
 save(filename, 'Xresponse', 'time_took', 'num_cars', '-v7.3');
 
 
