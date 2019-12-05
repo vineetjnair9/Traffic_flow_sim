@@ -5,7 +5,7 @@ function [X,t] = trap_adaptive(fhand,x_start,p,t_start,t_stop,timestep,u)
 X(:,1) = x_start;
 t(1) = t_start;
 
-min_slope = 20;
+min_slope = 0.1;
 max_slope = 40;
 
 n = 1;
