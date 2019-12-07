@@ -4,11 +4,11 @@
 
 % Updated some parameters using enhanced IDM paper
 p.l = 5; % Car length (can be speed limit) 
-p.s_0 = 2; % Minimum allowable distance between cars = desired stopping/jam distance (m) 
+p.s_0 = 20; % Minimum allowable distance between cars = desired stopping/jam distance (m) 
 p.T = 1.6; % Safe time headway/gap (s) - 1.5
 p.a = 0.73; % Maximum allowed acceleration (m/s^2) - 1.4
 p.b = 1.67; % Comfortable deceleration (m/s^2) - 2
-p.v_eq = 100*(5/18); % Desired street speed (m/s)
+p.v_eq = 40.5*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
 p.dxFD=1e-7; % For finite difference Jacobian
 
@@ -101,31 +101,33 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 %% Runtime and accuracy comparisons
 
-num_cars = 500;
+num_cars = 5;
 x_0 = zeros(2*num_cars,1);
 
 for i = 1:num_cars
     % Assume all cars start out evenly spaced by 10 m
     % Last follower car starts at 50 m
     x_0(i) = 50 + (num_cars-i)*20; 
+%     x_0(i) = (num_cars-i)*20;  % for one car. 
 end
 
 for i = num_cars+1:2*num_cars
     % Assume speeds of all cars randomly initialized between 20 and 30 m/s (according to uniform distribution)
     x_0(i) = 20 + (30-20)*rand(1);
+%     x_0(i) = 40.5*(5/18); % for one car simulation
 end
 
 t_start = 0; 
 t_stop = 180;
 %%
-timestep = 0.0001;
+timestep = 0.01;
 times = [1, 30, 60, 120, 180];
 tic;
 Xresponse = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 % Xresponse = SelectedForwardEuler('human_car_behaviour_v5', x_0, p, 'constant_speed_input', t_start, t_stop, timestep, times);
 % try splitting the time. 
 time_took = toc
-filename = 'response500full.mat';
+filename = 'response5.mat';
 save(filename, 'Xresponse', 'time_took', 'num_cars', '-v7.3');
 
 

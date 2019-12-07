@@ -1,16 +1,21 @@
 %% loading data. 
 X_100_nominal = load('response100.mat');
-%%
+
 X_100_global_T = load('response100_param_T_global.mat');
-%%
+
 X_100_input = load('response100_varied_input.mat');
-% num_cars = 100;
+
+X_1_input = load('response1.mat');
+
 %% setting up the road section and the disretization of the road section 
 % road_section_length = 500; % for the 500 cars. 
 % road_sectionX = 0:road_section_length:14000;  % create a road section along the x-axis.
 
 road_section_length = 200;
 road_sectionX = 0:road_section_length:6000; % for the others
+t_start = 0;
+t_stop = 180;
+timestep = 1E-4;
 
 %% First DEMo 100 cars  number of cars and velocity side by side.
 % flow and density should be on the right hand side. 
@@ -37,7 +42,6 @@ for t_iter = t_start:t_stop
     hbl_congestion.YData = ['lane'];
     hbl_congestion.XLabel = 'Distance along the road section [m]';
     hbl_congestion.Title = 'Heat map of number of cars along 200 m road sections';
-%     hbl_congestion.YLabel = '
     caxis(hbl_congestion, [0, max_scale_cong]); % fixing the color scheme so that it doesn't change. 
 
     subplot(1, 2, 2)
@@ -51,7 +55,6 @@ for t_iter = t_start:t_stop
     hbl_velc.XLabel = 'Distance along the road section [m]';
     hbl_velc.Title = 'Heatmap of velocity of cars along 200 m road sections';
     caxis(hbl_velc, [0, max_scale_velc]); % fixing the color scheme so that it doesn't change. 
-
     drawnow
 end
 
@@ -94,7 +97,6 @@ for t_iter = t_start:t_stop
     hbl_flow.XLabel = 'Distance along the road section [m]';
     hbl_flow.Title = 'Heatmap of flow of cars along 200 m road sections';
     caxis(hbl_flow, [0, max_scale_flow]); % fixing the color scheme so that it doesn't change. 
-
     drawnow
 end
 
@@ -137,7 +139,6 @@ for t_iter = t_start:t_stop
     hbl_density_param.XLabel = 'Distance along the road section [m]';
     hbl_density_param.Title = 'Heat map of density of cars along 200 m road sections with T = 4';
     caxis(hbl_density_param, [0, max_scale_density_param]); % fixing the color scheme so that it doesn't change. 
-
     drawnow
 end
 
@@ -230,3 +231,55 @@ for t_iter = t_start:t_stop
 
     drawnow
 end
+
+%% Sixth DEMO --> showing 1 car
+X_1_input = load('response1.mat');
+Xresponse = X_1_input.Xresponse;
+num_cars = X_1_input.num_cars;
+timestep = 0.01;
+t = t_start:timestep:t_stop; 
+
+
+% figure(1)  
+% subplot(1, 2, 1)
+% hold on
+% plot(t,Xresponse(1,:));
+% xlabel('Time [s]');
+% ylabel('Position along road [m]');
+% hold off
+% xlim([0, 40]);
+% 
+% subplot(1, 2, 2)  
+% hold on
+% plot(t,Xresponse(2,:));
+% xlabel('Time [s]');
+% ylabel('Speed of car [m/s]');
+% hold off
+% xlim([0, 40]);
+
+figure(1)
+subplot(1,2,1)
+h1 = animatedline;
+xlim([0, 40])
+ylim([0, 400])
+title('Distance of 1 car')
+xlabel('Time [s]')
+ylabel('Distance [m]')
+% axis = ([0, 40, 0, 400])
+
+
+subplot(1, 2, 2)
+h2 = animatedline;
+% axis = ([0, 40, 9, 11.5])
+xlim([0, 40])
+ylim([9, 11.3])
+title('Velocity of 1 car')
+xlabel('Time [s]')
+ylabel('speed [m/s]')
+for i = 1:40/timestep
+    addpoints(h1, t(i), Xresponse(1, i));
+    addpoints(h2, t(i), Xresponse(2, i));
+
+    drawnow
+end
+

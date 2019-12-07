@@ -11,4 +11,3 @@ else
    u(2) = lead_v0;
 end
 end
-
