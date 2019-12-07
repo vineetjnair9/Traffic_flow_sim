@@ -10,35 +10,35 @@ query_road_sectionX = 0:100:6000;
 %%   plots, not heatmaps   congestion
 
 times = [1, 10, 20, 30, 40, 50, 60];
-% figure(1)
-% hold on
-% for i = 1:size(times, 2)
-%     time_slice = times(i)/timestep;
-%     congestion_data = howmanycars(Xresponse, num_cars, road_sectionX, time_slice, road_section_length);
-% %     interpolated_cong_data = interp1(road_sectionX, congestion_data);
-%     plot(road_sectionX, congestion_data)
-%     % work on adding legends
-% end
-% hold off
-% xlabel('Road sections [m]')
-% ylabel('Congestion per 200 m section [cars/m]')
-% xlim([0 6500])
-% ylim([0 12])
-% legend('0 s', '30 s', '60 s', '120 s', '180 s')
-% set(gca,'FontSize',15)
-% figure(2)
+figure(1)
 hold on
 for i = 1:size(times, 2)
     time_slice = times(i)/timestep;
     congestion_data = howmanycars(Xresponse, num_cars, road_sectionX, time_slice, road_section_length);
-    interpolated_cong_data = interp1(road_sectionX, congestion_data, query_road_sectionX, 'spline');
-    plot(query_road_sectionX, interpolated_cong_data)
+%     interpolated_cong_data = interp1(road_sectionX, congestion_data);
+    plot(road_sectionX, congestion_data)
+    % work on adding legends
+end
+hold off
+xlabel('Road sections [m]')
+ylabel('Congestion per 200 m section [cars/m]')
+xlim([0 6500])
+ylim([0 12])
+legend('0 s', '30 s', '60 s', '120 s', '180 s')
+set(gca,'FontSize',15)
+figure(2)
+hold on
+for i = 1:size(times, 2)
+    time_slice = times(i)/timestep;
+    congestion_data = howmanycars(Xresponse, num_cars, road_sectionX, time_slice, road_section_length);
+    interpolated_cong_data = interp1(road_sectionX, congestion_data, 0:100:6000, 'spline');
+    plot(0:100:6000, interpolated_cong_data)
     ylim([0, 11]);
 end
 hold off
 xlabel('Road sections [m]')
-ylabel('Congestion per 200 m section [cars/m] ')
-xlim([0 6000])
+ylabel('Congestoin per 200 m section [cars/m]')
+xlim([0 6500])
 ylim([0 12])
 legend('0 s', '30 s', '60 s', '120 s', '180 s')
 set(gca,'FontSize',15)
@@ -51,8 +51,7 @@ hold on
 for i = 1:size(times, 2)
     time_slice = times(i)/timestep;
     avg_velc_data = velocityheatmap(Xresponse, num_cars, road_sectionX, time_slice, road_section_length);
-    interpolated_velc = interp1(road_sectionX, avg_velc_data, query_road_sectionX, 'spline');
-    plot(query_road_sectionX, interpolated_velc, 'LineWidth', 1.2)
+    plot(road_sectionX, avg_velc_data, 'LineWidth', 1.2)
 end
 hold off
 xlabel('Road sections [m]')
@@ -69,13 +68,12 @@ for i = 1:size(times, 2)
     avg_velc_data = velocityheatmap(Xresponse,num_cars, road_sectionX, time_slice, road_section_length);
     congestion_data = howmanycars(Xresponse, num_cars, road_sectionX, time_slice, road_section_length)/road_section_length;
     flux_data = congestion_data.*avg_velc_data;
-    interpolated_flux_data = interp1(road_sectionX, flux_data, query_road_sectionX, 'spline');
-    plot(query_road_sectionX, interpolated_flux_data, 'LineWidth', 1.2)
+    plot(road_sectionX, flux_data, 'LineWidth', 1.2)
 end
 hold off
 xlabel('Road sections [m]')
 ylabel('Flow per 200 m section [cars/s]')
-xlim([0 6000])
+xlim([0 6500])
 ylim([0 1.1])
 legend('0 s', '30 s', '60 s', '120 s', '180 s')
 set(gca,'FontSize',15)
@@ -110,7 +108,7 @@ hold off
 xlabel('Road sections [m]')
 ylabel('Density per 200 m section [cars/m]')
 xlim([0 6000])
-ylim([0 0.12])
+ylim([0 0.06])
 legend('0 s', '30 s', '60 s', '120 s', '180 s')
 set(gca,'FontSize',15)
 
