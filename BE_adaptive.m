@@ -1,4 +1,4 @@
-function [X,t] = trap_adaptive(fhand,x_start,p,t_start,t_stop,timestep,u)
+function [X,t] = BE_adaptive(fhand,x_start,p,t_start,t_stop,timestep,u)
 % uses Trapezoidal rule to simulate model dx/dt=f(x)
 % u - input function handle 
 
@@ -14,11 +14,11 @@ while t(n) < t_stop % time index
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
    
-   f = fhand(X(:,n),u(t(n)),t(n));
-   gamma = X(:,n) + (dt/2)*f;
+   x0 = X(:,n);
+   gamma = x0;
       
    f_new = @(x,u,t) f_trap(dt,gamma,fhand,x,u,t);
-   [X(:,n+1), converged, ~] = newtonNdGMRES_trap(f_new,X(:,n),p,u,dt,t(n+1));
+   [X(:,n+1), converged, ~] = newtonNdGMRES_be(f_new,X(:,n),p,u,dt,t(n+1));
    
    % Dynamic adaptive time stepping
    

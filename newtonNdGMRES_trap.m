@@ -16,7 +16,7 @@ function [xf, converged, x] = newtonNdGMRES_trap(fhand,x0,p,u,dt,t)
 
 tolf = 1e-8;         % function convergence tolerance 1e-10
 tolx = 1e-10;          % step convergence tolerance 1e-8
-maxIters = 10;       % max # of iterations
+maxIters = 5;       % max # of iterations
 x00 = x0;             % initial guess
 epsilon = 1e-5;
 

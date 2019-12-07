@@ -100,24 +100,24 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 % Need to change lead car position too in input when we change no. of cars!
 
 %% Runtime and accuracy comparisons
-timestep = 1e-4;
+timestep = 1e-3;
 num_cars = 100;
 
-x_0 = zeros(2*num_cars,1); % Initial state (speeds & positions)
+x_0_new = zeros(2*num_cars,1); % Initial state (speeds & positions)
 
 for i = 1:num_cars
     % Assume all cars start out evenly spaced by 10 m
     % Last follower car starts at 50 m
-    x_0(i) = 50 + (num_cars-i)*20; 
+    x_0_new(i) = 50 + (num_cars-i)*20; 
 end
 
 for i = num_cars+1:2*num_cars
     % Assume speeds of all cars randomly initialized between 20 and 30 m/s (according to uniform distribution)
-    x_0(i) = 20 + (30-20)*rand(1);
+    x_0_new(i) = 20 + (30-20)*rand(1);
 end
 
 t_start = 0; 
-t_stop = 120; 
+t_stop = 70; % 120
 
 %% 'True' solution (FE using very small timestep)
 
@@ -127,37 +127,60 @@ X_true = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_st
 FE_time_true = toc
 
 %%
-timestep = 1e-3;
-
 u = @constant_speed_input;
 fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
-%%
-tic
-[X_trap_adaptive,t_adapt] = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
-trap_adapt_time = toc
-%trap_adapt_accuracy = (norm(X_trap_adaptive - X_true)/norm(X_true))*100
 
 %%
+timestep = 0.1;
 tic
-X_FE = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
-FE_time = toc;
-%FE_accuracy = (norm(X_FE - X_true__100)/norm(X_true))*100 % Relative error (%)
+X_FE = ForwardEuler('human_car_behaviour_v5',x_0_new,p,'constant_speed_input',t_start,t_stop,timestep,false);
+FE_time = toc
 
 %%
 tic
 X_trap = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
 trap_time = toc
-%trap_accuracy = (norm(X_trap - X_true)/norm(X_true))*100 % Relative error (%)
+
+%%
+tic
+[X_trap_adaptive,t_trap_adapt] = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
+trap_adapt_time = toc
+
+%%
+tic 
+X_be = BE(fhand,x_0,p,t_start,t_stop,timestep,u);
+be_time = toc
+
+%%
+tic 
+[X_be_adaptive, t_be_adapt] = BE_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
+be_time = toc
+
+%% Accuracy
+timestep = 0.1;
+X_comp = X_trap_adaptive;
+t_comp = t_trap_adapt;
+%t_comp = 0:timestep:70;
+
+t_true = 0:1e-4:70;
+
+rel_error = zeros(size(X_comp,2),1);
+for i = 2:size(X_comp,2)
+    index = 1+floor(t_comp(i)/1e-4);
+    %index = find(t_true == t_comp(i));
+    rel_error(i) = norm(X_comp(:,i) - X_true(:,index),Inf)/norm(X_true(:,index),Inf);
+end
+
+% Average relative error for whole simulation time
+rel_error_avg = mean(rel_error)
 
 %% Plots
 
-%X = X_FE;
-%t = t_start:timestep:t_stop; 
+% X = X_FE;
+% t = t_start:timestep:t_stop; 
 
 X = X_trap_adaptive;
-t = t_adapt;
-
-t = t_start:timestep:t_stop; 
+t = t_trap_adapt; 
 
 figure(1)  
 hold on
