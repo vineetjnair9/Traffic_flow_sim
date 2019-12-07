@@ -101,26 +101,25 @@ x_0 = [12,6,0,10,4,0]; % [x - positions, v - speeds]
 
 %% Runtime and accuracy comparisons
 
-num_cars = 5;
+num_cars = 1;
 x_0 = zeros(2*num_cars,1);
 
 for i = 1:num_cars
     % Assume all cars start out evenly spaced by 10 m
     % Last follower car starts at 50 m
-    x_0(i) = 50 + (num_cars-i)*20; 
-%     x_0(i) = (num_cars-i)*20;  % for one car. 
+%     x_0(i) = 50 + (num_cars-i)*20; 
+    x_0(i) = num_cars-i
 end
 
 for i = num_cars+1:2*num_cars
     % Assume speeds of all cars randomly initialized between 20 and 30 m/s (according to uniform distribution)
     x_0(i) = 20 + (30-20)*rand(1);
-%     x_0(i) = 40.5*(5/18); % for one car simulation
 end
 
 t_start = 0; 
 t_stop = 180;
 %%
-timestep = 0.01;
+timestep = 0.0001;
 times = [1, 30, 60, 120, 180];
 tic;
 Xresponse = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);

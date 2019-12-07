@@ -1,10 +1,12 @@
 %% loading data. 
 X_100_nominal = load('response100.mat');
-%%
+
 X_100_global_T = load('response100_param_T_global.mat');
-%%
+
 X_100_input = load('response100_varied_input.mat');
-% num_cars = 100;
+
+X_1_input = load('response1.mat');
+
 %% setting up the road section and the disretization of the road section 
 % road_section_length = 500; % for the 500 cars. 
 % road_sectionX = 0:road_section_length:14000;  % create a road section along the x-axis.
@@ -230,107 +232,54 @@ for t_iter = t_start:t_stop
     drawnow
 end
 
-%% heat map snapshots.
-X500full = load('response500full.mat');
-%% using custom heatmap
-% t = 120;
-% timestep = 1E-4;
-% X500 = X500full.Xresponse;
-% num_cars= X500full.num_cars;
-% figure(1)
-% cars_on_road = howmanycars(X500, num_cars, road_sectionX, t/timestep, road_section_length)/road_section_length;
-% veloc_on_road = velocityheatmap(X500, num_cars, road_sectionX, t/timestep, road_section_length);
+%% Sixth DEMO --> showing 1 car
+X_1_input = load('response1.mat');
+Xresponse = X_1_input.Xresponse;
+num_cars = X_1_input.num_cars;
+timestep = 0.01;
+t = t_start:timestep:t_stop; 
+
+
+% figure(1)  
+% subplot(1, 2, 1)
+% hold on
+% plot(t,Xresponse(1,:));
+% xlabel('Time [s]');
+% ylabel('Position along road [m]');
+% hold off
+% xlim([0, 40]);
 % 
-% flow_cars = cars_on_road.*veloc_on_road;
-% hbl_flow = heatmap_custom(flow_cars, 0:1000:6000);
-% % hbl_flow.GridVisible = 'off';
-% % hbl_flow.Colormap = cool;
-% % hbl_flow.CellLabelColor = 'none';
-% % hbl_flow.XData = road_sectionX;
-% % hbl_flow.YData = ['lane'];
-% % hbl_flow.XLabel = 'Distance along the road section [m]';
-% % hbl_flow.Title = 'Heatmap of flow of cars along 200 m road sections at t = 120 s';
-% set(gca, 'FontSize', 15);
-% 
-% % figure(2)
-% % cars_on_road = howmanycars(X500, num_cars, road_sectionX, t/timestep, road_section_length)/road_section_length;
-% % hbl_density_input = heatmap(cars_on_road);
-% % hbl_density_input.GridVisible = 'off';
-% % hbl_density_input.Colormap = cool;
-% % hbl_density_input.CellLabelColor = 'none';
-% % hbl_density_input.XData = road_sectionX;
-% % hbl_density_input.XDisplayData = 0:400:6000;
-% % hbl_density_input.YData = ['lane'];
-% % hbl_density_input.XLabel = 'Distance along the road section [m]';
-% % hbl_density_input.Title = 'Heat map of density along 200 m road sections at t = 120 s';
-% % set(gca,'FontSize',15);
-% 
+% subplot(1, 2, 2)  
+% hold on
+% plot(t,Xresponse(2,:));
+% xlabel('Time [s]');
+% ylabel('Speed of car [m/s]');
+% hold off
+% xlim([0, 40]);
 
-%%
-t = 120;
-X500 = X500full.Xresponse;
-num_cars = X500full.num_cars;
-timestep = 1E-4;
-
-%congestion
-% figure(1)
-% cars_on_road = howmanycars(X500, num_cars, road_sectionX, t/timestep, road_section_length);
-% hbl_congestion = heatmap(cars_on_road);
-% hbl_congestion.GridVisible = 'off';
-% hbl_congestion.Colormap = cool;
-% hbl_congestion.CellLabelColor = 'none';
-% hbl_congestion.XData = road_sectionX;
-% hbl_congestion.YData = ['lane'];
-% hbl_congestion.XLabel = 'Distance along the road section [m]';
-% hbl_congestion.Title = 'Heat map of number of cars along 200 m road sections at t = 120 s';
-% set(gca,'FontSize',15);
-% density
-
-figure(2)
-cars_on_road = howmanycars(X500, num_cars, road_sectionX, t/timestep, road_section_length)/road_section_length;
-hbl_density_input = heatmap(cars_on_road);
-hbl_density_input.GridVisible = 'off';
-hbl_density_input.Colormap = cool;
-hbl_density_input.CellLabelColor = 'none';
-hbl_density_input.XData = road_sectionX; 
-hbl_density_input.YData = ['lane'];
-hbl_density_input.XLabel = 'Distance along the road section [m]';
-hbl_density_input.Title = 'Density along 200 m road sections at t = 120 s';
-set(gca,'FontSize',15);
-hbl_density_input.XDisplayLabels = {'0', ' ', ' ', ' ', ' ','1000', ' ', ' ', ' ', ' ','2000', ' ', ' ', ' ', ' ','3000', ' ', ' ', ' ', ' ','4000', ' ', ' ', ' ', ' ','5000', ' ', ' ', ' ', ' ','6000'};
-% set(gca,'XTick',0:1000:6000)
-
-% velocity
-% figure(3)
-veloc_on_road = velocityheatmap(X500, num_cars, road_sectionX, t/timestep, road_section_length);
-% hbl_velc = heatmap(veloc_on_road);
-% hbl_velc.GridVisible = 'off';
-% hbl_velc.Colormap = cool;
-% hbl_velc.CellLabelColor = 'none';
-% hbl_velc.XData = road_sectionX;
-% hbl_velc.YData = ['lane'];
-% hbl_velc.XLabel = 'Distance along the road section [m]';
-% hbl_velc.Title = 'Heatmap of velocity of cars along 200 m road sections at t = 120 s';
-% set(gca, 'FontSize', 15);
-
-%flow
-figure(4)
-flow_cars = cars_on_road.*veloc_on_road;
-hbl_flow = heatmap(flow_cars);
-hbl_flow.GridVisible = 'off';
-hbl_flow.Colormap = cool;
-hbl_flow.CellLabelColor = 'none';
-hbl_flow.XData = road_sectionX;
-hbl_flow.YData = ['lane'];
-hbl_flow.XLabel = 'Distance along the road section [m]';
-hbl_flow.Title = 'Flow along 200 m road sections at t = 120 s';
-hbl_flow.XDisplayLabels = {'0', ' ', ' ', ' ', ' ','1000', ' ', ' ', ' ', ' ','2000', ' ', ' ', ' ', ' ','3000', ' ', ' ', ' ', ' ','4000', ' ', ' ', ' ', ' ','5000', ' ', ' ', ' ', ' ','6000'};
-
-set(gca, 'FontSize', 15);
+figure(1)
+subplot(1,2,1)
+h1 = animatedline;
+xlim([0, 40])
+ylim([0, 400])
+title('Distance of 1 car')
+xlabel('Time [s]')
+ylabel('Distance [m]')
+% axis = ([0, 40, 0, 400])
 
 
+subplot(1, 2, 2)
+h2 = animatedline;
+% axis = ([0, 40, 9, 11.5])
+xlim([0, 40])
+ylim([9, 11.3])
+title('Velocity of 1 car')
+xlabel('Time [s]')
+ylabel('speed [m/s]')
+for i = 1:40/timestep
+    addpoints(h1, t(i), Xresponse(1, i));
+    addpoints(h2, t(i), Xresponse(2, i));
 
-
-
-
+    drawnow
+end
 
