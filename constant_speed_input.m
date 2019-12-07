@@ -1,6 +1,6 @@
 function u = constant_speed_input(t)
 
-lead_x0 = 150; % Initial lead car position (m) - set as 10-20 m in front of car indexed 1
+lead_x0 = 2050; % Initial lead car position (m) - set as 20 m in front of car indexed 1
 lead_v0 = 80*(5/18); % Constant speed of lead car
 
 % Generating input
@@ -11,4 +11,3 @@ else
    u(2) = lead_v0;
 end
 end
-

@@ -41,11 +41,10 @@ x_0 = [12,5,0,10,5,0]; % [x - positions, v - speeds]
 t_start = 0; 
 t_stop = 200; 
 timestep = 0.001;
-%X = ForwardEuler('human_car_behaviour_v5',x_0,p,'sinusoidal_input',t_start,t_stop,timestep,false);
+X = ForwardEuler('human_car_behaviour_v5',x_0,p,'sinusoidal_input',t_start,t_stop,timestep,false);
 
 u = @(t) constant_speed_input(t);
 fhand = @(x,t) human_car_behaviour_v5(x,p,u,t);
-X = trap(fhand,x_0,p,t_start,t_stop,timestep);
 
 t = t_start:timestep:t_stop; 
 figure(1)
