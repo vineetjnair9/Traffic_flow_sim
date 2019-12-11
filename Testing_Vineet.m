@@ -131,12 +131,13 @@ u = @constant_speed_input;
 fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
 
 %%
-timestep = 0.1;
+timestep = 0.5;
 tic
-X_FE = ForwardEuler('human_car_behaviour_v5',x_0_new,p,'constant_speed_input',t_start,t_stop,timestep,false);
+X_FE = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 FE_time = toc
 
 %%
+timestep = 1;
 tic
 X_trap = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
 trap_time = toc
@@ -176,11 +177,11 @@ rel_error_avg = mean(rel_error)
 
 %% Plots
 
-% X = X_FE;
-% t = t_start:timestep:t_stop; 
+X = X_FE;
+t = t_start:timestep:t_stop; 
 
-X = X_trap_adaptive;
-t = t_trap_adapt; 
+% X = X_trap_adaptive;
+% t = t_trap_adapt; 
 
 figure(1)  
 hold on

@@ -22,8 +22,6 @@ for idx = 1:length(q)
     eval_f = @(x, p, u) Q*human_car_behaviour_v5(x,p,u) + (eye(m)-Q)*x;
     %     eval_f = @(Q, human_car_behavior_v5, x0iter,p,u, m) Q*human_car_behaviour_v5(x0iter,p,u) + (eye(m)-Q)*x0iter;
 
-
-    
     xs(:, idx) = NewtonMethod(eval_f,x0iter,p,u,errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf);
 % NewtonMethod(eval_f,x0,p,u,errf,errDeltax,relDeltax,MaxIter,visualize,FiniteDifference,eval_Jf)
 

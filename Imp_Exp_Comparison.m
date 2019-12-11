@@ -7,10 +7,11 @@ p.a = 0.73; % Maximum allowed acceleration (m/s^2) - 1.4
 p.b = 1.67; % Comfortable deceleration (m/s^2) - 2
 p.v_eq = 100*(5/18); % Desired street speed (m/s)
 p.sigma = 4; % Acceleration exponent 
-p.dxFD=1e-7; % For finite difference Jacobian
+p.dxFD = 1e-7; % For finite difference Jacobian
+p.dt = 1e-2; % Forward Euler timestep for implicit Newton guess
 
 %% Runtime and accuracy comparisons
-num_cars = 25;
+num_cars = 25; 
 
 x_0 = zeros(2*num_cars,1); % Initial state (speeds & positions)
 
@@ -26,7 +27,7 @@ for i = num_cars+1:2*num_cars
 end
 
 t_start = 0; 
-t_stop = 120; % 
+t_stop = 120; 
 
 %% 'True' solution (FE using very small timestep)
 timestep = 1e-4;
@@ -35,7 +36,7 @@ X_true = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_st
 FE_time_true = toc
 
 %%
-timestep = 0.1;
+timestep = 0.001;
 tic
 X_FE = ForwardEuler('human_car_behaviour_v5',x_0,p,'constant_speed_input',t_start,t_stop,timestep,false);
 FE_time = toc
@@ -45,18 +46,19 @@ u = @constant_speed_input;
 fhand = @(x,u,t) human_car_behaviour_v5(x,p,u,t);
 
 %%
-timestep = 1e-3;
+timestep = 0.3;
 tic
 X_trap = trap(fhand,x_0,p,t_start,t_stop,timestep,u);
 trap_time = toc
 
 %%
-timestep = 0.1;
+timestep = 1;
 tic
 [X_trap_adaptive,t_trap_adapt] = trap_adaptive(fhand,x_0,p,t_start,t_stop,timestep,u);
 trap_adapt_time = toc
 
 %%
+timestep = 0.1;
 tic 
 X_be = BE(fhand,x_0,p,t_start,t_stop,timestep,u);
 be_time = toc
@@ -68,9 +70,9 @@ be_time = toc
 
 %% Accuracy
 
-timestep = 1e-3;
+timestep = 0.1;
 t_comp = 0:timestep:t_stop;
-%t_comp = t_trap_adapt;
+% t_comp = t_trap_adapt;
 
 X_comp = X_be;
 
@@ -89,8 +91,10 @@ rel_error_avg = mean(rel_error)
 
 %% Plots
 
-X = X_FE;
+X = X_trap;
 t = t_start:timestep:t_stop; 
+
+t_true = t_start:1e-4:t_stop;
 
 % X = X_trap_adaptive;
 % t = t_trap_adapt; 
@@ -100,22 +104,26 @@ hold on
 for i = 1:num_cars
     plot(t,X(i,:));
 end
-% for i = 1:num_cars
-%     plot(t_true,X_true(i,:));
-% end
+figure(2)
+hold on
+for i = 1:num_cars
+    plot(t_true,X_true(i,:));
+end
 xlabel('Time [s]');
 ylabel('Position along road [m]');
 %legend('Estimate','True');
 hold off
 
-figure(2)  
+figure(3)  
 hold on
 for i = num_cars+1:2*num_cars
     plot(t,X(i,:));
 end
-% for i = num_cars+1:2*num_cars
-%     plot(t_true,X_true(i,:));
-% end
+figure(4)
+hold on
+for i = num_cars+1:2*num_cars
+    plot(t_true,X_true(i,:));
+end
 xlabel('Time [s]');
 ylabel('Speed of car [m/s]');
 %legend('Estimate','True');

@@ -22,7 +22,6 @@ timestep = 1E-4;
 Xresponse = X_100_nominal.Xresponse;
 num_cars = X_100_nominal.num_cars;
 
-
 figure()
 
 max_scale_cong = 13;

@@ -47,7 +47,8 @@ while n <= ceil((t_stop-t_start)/timestep),
    t(n+1)= t(n) + p.dt;
    u_next = feval(eval_u, t(n+1));   
    x0=X(:,n); %this is the easiest guess but could also use one step of Forward Euler
-   %xFE=ForwardEuler(eval_f,X(:,n),p,eval_u,t(n),t(n+1),p.dt,0);    x0=xFE(:,2);  %one step of FE
+   %xFE=ForwardEuler(eval_f,X(:,n),p,eval_u,t(n),t(n+3),p.dt,0);    
+   %x0=xFE(:,2);  %one step of FE
    [X(:,n+1),converged,errF_k,errDeltax_k,relDeltax_k,k(n)] = NewtonMethod(eval_F_implicit,x0,p,u_next,errF_implicit,errDeltax,relDeltax,MaxIter,0,FiniteDifference,eval_JF_implicit);
    if ~converged
       timestep=timestep/2;

@@ -14,11 +14,10 @@ function [xf, converged, x] = newtonNdGMRES_be(fhand,x0,p,u,dt,t)
 % number of Newton steps that are plotted sequentially
 % pauses between sub-steps.
 
-tolf = 1e-8;         % function convergence tolerance 1e-10
-tolx = 1e-10;          % step convergence tolerance 1e-8
-maxIters = 5;       % max # of iterations
+tolf = 1e-5;         % function convergence tolerance 1e-10
+tolx = 1e-5;          % step convergence tolerance 1e-8
+maxIters = 10;       % max # of iterations
 x00 = x0;             % initial guess
-epsilon = 1e-5;
 
 len = length(x0);
 
@@ -27,8 +26,8 @@ for iter = 1:maxIters
     f = fhand(x0,u(t),t);               % evaluate function
     J = Jf_FiniteDifference('human_car_behaviour_v5',x0,p,u(t),t);
     J_be = eye(len) - dt*J;
-    [dx,~] = gmres(J_be,-f);
-    %dx = -J_trap\f; 
+%     [dx,~] = gmres(J_be,-f);
+    dx = -J_be\f; 
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1
     x(:,iter) = x0 + dx;         % solution x at step k+1

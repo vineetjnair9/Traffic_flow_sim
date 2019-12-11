@@ -6,10 +6,11 @@ X(:,1) = x_start;
 t(1) = t_start;
 
 min_slope = 0.1;
-max_slope = 40;
+max_slope = 80;
 num_cars = 25;
 
 n = 1;
+
 while t(n) < t_stop % time index
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
@@ -18,7 +19,7 @@ while t(n) < t_stop % time index
    gamma = X(:,n) + (dt/2)*f;
       
    f_new = @(x,u,t) f_trap(dt,gamma,fhand,x,u,t);
-   [X(:,n+1), converged, ~] = newtonNdGMRES_trap(f_new,X(:,n),p,u,dt,t(n+1));
+   [X(:,n+1), converged, ~] = newtonNd_trap(f_new,X(:,n),p,u,dt,t(n+1));
    
    % Dynamic adaptive time stepping
    
@@ -30,10 +31,10 @@ while t(n) < t_stop % time index
    elseif (slope < min_slope) % min slope
        timestep = timestep*2;
        n = n-1;
-       min_slope = min_slope * 0.1;
+       min_slope = min_slope * 0.5;
    end
    n = n+1;
-   
+   timestep;
 end
 
 end
